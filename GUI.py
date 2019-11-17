@@ -1,11 +1,23 @@
 from tkinter import *
 from tkinter import ttk
+from tkinter import filedialog
 from PIL import Image, ImageTk
 
 def changeShape(event):
     item = tree.identify('item', event.x, event.y)
     print("you clicked on", tree.item(item, "text"))
     #switch case for tree.item
+
+def openFileDialog():
+    print('aa')
+    filename = filedialog.askopenfilename(initialdir =  "~", title = "Select A File", filetypes =
+    (("jpeg files","*.jpg"),("all files","*.*")) )
+    print(filename)
+    load = Image.open(filename)
+    render = ImageTk.PhotoImage(load.resize((400, 400)))
+    img = Label(labelframe_input, image=render)
+    img.image = render
+    img.grid(column = 0, row = 0)
 
 root = Tk()
 root.geometry("1200x700")
@@ -34,7 +46,7 @@ img.grid(column = 0, row = 0)
 button_container = Label(root)
 button_container.grid(column = 2, row = 1)
  
-btn_open_image = Button(button_container, text='Open Image', width = 38)
+btn_open_image = Button(button_container, text='Open Image', width = 38, command = openFileDialog)
 btn_open_image.grid(column = 0, row = 0, pady = 7, padx = 5)
 
 btn_open_rule = Button(button_container, text='Open Rule Editor', width = 38)
