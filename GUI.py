@@ -3,64 +3,105 @@ from tkinter import ttk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
+IMAGE_SIZE = 350
+BUTTON_WIDTH = 30
+TREE_WIDTH = 270
+TREE_HEIGHT = 18
+
+class imageClass:
+    def __init__(self, master, image_path, image_size):
+        self.master = master
+        self.img = ''
+        self.image_size = image_size
+        self.loadImage(image_path)
+    
+    def loadImage(self, image_path):
+        load = Image.open(image_path)
+        render = ImageTk.PhotoImage(load.resize((self.image_size, self.image_size)))
+        self.img = Label(self.master, image=render)
+        self.img.image = render
+        self.img.pack(side = 'left')
+
+    def changeImage(self):
+        filename = filedialog.askopenfilename(initialdir =  "~", title = "Select A File", filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+        self.img.destroy()
+        self.loadImage(filename)
+
+class textClass:
+    def __init__(self, master):
+        self.master = master
+        self.text = Text(master, height=TREE_HEIGHT, width=41)
+        self.text.pack(side = 'left')
+        self.text.configure(state = 'disabled')
+        self.text.bind("<1>", lambda event: self.text.focus_set())
+
+    def changeText(self, text):
+        self.text.configure(state = 'normal')
+        self.text.delete('1.0', END)
+        self.text.insert(END, text)
+        self.text.configure(state = 'disabled')
+
 def changeShape(event):
     item = tree.identify('item', event.x, event.y)
     print("you clicked on", tree.item(item, "text"))
     #switch case for tree.item
 
-def openFileDialog():
-    print('aa')
+def pickSource():
+    img.destroy()
     filename = filedialog.askopenfilename(initialdir =  "~", title = "Select A File", filetypes =
     (("jpeg files","*.jpg"),("all files","*.*")) )
     print(filename)
     load = Image.open(filename)
-    render = ImageTk.PhotoImage(load.resize((400, 400)))
+    render = ImageTk.PhotoImage(load.resize((IMAGE_SIZE, IMAGE_SIZE)))
     img = Label(labelframe_input, image=render)
     img.image = render
-    img.grid(column = 0, row = 0)
+    img.pack(side = 'left')
+
+
 
 root = Tk()
-root.geometry("1200x700")
+root.geometry("1000x700")
 root.resizable(0, 0)
 root.title('Image Detection')
 
-labelframe_input = LabelFrame(root, text="This is a LabelFrame")
-labelframe_input.grid(column = 0, row = 1)
+# Row Container
+row1 = Frame(root)
+row1.pack(side = 'top')
+row2 = Frame(root)
+row2.pack(side = 'top')
 
+# Source image
+labelframe_input = LabelFrame(row1, text="Source Image")
+labelframe_input.pack(side = 'left')
 
-load = Image.open("images/box.jpeg")
-render = ImageTk.PhotoImage(load.resize((400, 400)))
-img = Label(labelframe_input, image=render)
-img.image = render
-img.grid(column = 0, row = 0)
+image_source = imageClass(labelframe_input, "images/box.jpeg", IMAGE_SIZE)
 
-labelframe_pattern = LabelFrame(root, text="This is a LabelFrame")
-labelframe_pattern.grid(column = 1, row = 1)
+# Pattern image
+labelframe_pattern = LabelFrame(row1, text="Detection Image")
+labelframe_pattern.pack(side = 'left')
 
-load = Image.open("images/rectangle.jpg")
-render = ImageTk.PhotoImage(load.resize((400, 400)))
-img = Label(labelframe_pattern, image=render)
-img.image = render
-img.grid(column = 0, row = 0)
+image_pattern = imageClass(labelframe_pattern, "images/rectangle.jpg", IMAGE_SIZE)
 
-button_container = Label(root)
-button_container.grid(column = 2, row = 1)
+# Button
+button_container = Label(row1)
+button_container.pack(side = 'left')
  
-btn_open_image = Button(button_container, text='Open Image', width = 38, command = openFileDialog)
-btn_open_image.grid(column = 0, row = 0, pady = 7, padx = 5)
+btn_open_image = Button(button_container, text='Open Image', width = BUTTON_WIDTH, command = image_source.changeImage)
+btn_open_image.pack(side = 'top', pady = 4)
 
-btn_open_rule = Button(button_container, text='Open Rule Editor', width = 38)
-btn_open_rule.grid(column = 0, row = 1, pady = 7, padx = 5)
+btn_open_rule = Button(button_container, text='Open Rule Editor', width = BUTTON_WIDTH)
+btn_open_rule.pack(side = 'top', pady = 4)
 
-btn_show_rule = Button(button_container, text='Show Rules', width = 38)
-btn_show_rule.grid(column = 0, row = 2, pady = 7, padx = 5)
+btn_show_rule = Button(button_container, text='Show Rules', width = BUTTON_WIDTH)
+btn_show_rule.pack(side = 'top', pady = 4)
 
-btn_show_facts = Button(button_container, text='Show Facts', width = 38)
-btn_show_facts.grid(column = 0, row = 3, pady = 7, padx = 5)
+btn_show_facts = Button(button_container, text='Show Facts', width = BUTTON_WIDTH)
+btn_show_facts.pack(side = 'top', pady = 4)
 
+# Treeview
 tree = ttk.Treeview(button_container)
-tree.column("#0", width=375, minwidth=375, stretch=NO)
-tree.heading("#0",text="Shape",anchor=W)
+tree.column("#0", width=TREE_WIDTH, minwidth=TREE_WIDTH, stretch=NO)
+tree.heading("#0",text="Shape")
 
 #Level 0
 shape = tree.insert('', 'end', text = "All Shapes")
@@ -95,6 +136,24 @@ trapesium_kanan = tree.insert(trapesium, 'end', text = "Trapesium Rata Kanan")
 trapesium_kiri = tree.insert(trapesium, 'end', text = "Trapesium Rata Kiri")
 
 tree.bind('<Double-1>', changeShape)
-tree.grid(column = 0, row = 4, pady = 7, padx = 5)
+tree.pack(side = 'top')
+
+# Result image
+labelframe_result = LabelFrame(row2, text="Detection Result")
+labelframe_result.pack(side = 'left')
+
+image_result = imageClass(labelframe_result, "images/rectangle.jpg", 300)
+
+# Facts lists
+labelframe_facts = LabelFrame(row2, text="Hit Rules")
+labelframe_facts.pack(side = 'left')
+
+facts_container = textClass(labelframe_facts)
+
+# Rulse lists
+labelframe_rule = LabelFrame(row2, text="Matched Facts")
+labelframe_rule.pack(side = 'left')
+
+rules_container = textClass(labelframe_rule)
 
 root.mainloop()
