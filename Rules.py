@@ -22,12 +22,12 @@ class ShapeIdentifier(KnowledgeEngine):
         self.result.append("Segi Enam")
 
     # nice to have
-    @Rule(Fact(jumlah_sisi = P(lambda x: x > 6 and x < 15)))
+    @Rule(Fact(jumlah_sisi = BETWEEN(7, 15))) #between bersifat inklusif [7, 15]
     def elips(self):
         self.result.append("Elips")
 
     #nice to have
-    @Rule(Fact(jumlah_sisi = P(lambda x: x > 15)))
+    @Rule(Fact(jumlah_sisi = GE(15)))
     def lingkaran(self):
         self.result.append("Lingkaran")
 
