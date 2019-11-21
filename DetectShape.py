@@ -18,7 +18,8 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         # Shape Detector
         shape_detector.reset()
         shape_detector.result = []
-        shape_detector.declare(Rules.Fact(jumlah_sisi = len(approx), list_of_angles = []))
+        angles = [90, 80, 100, 90] #stub, ganti dengan list of angles yang sebenarnya
+        shape_detector.declare(Rules.Fact(jumlah_sudut = len(approx), list_of_angles = angles))
         #list_of_angles dibaca secara counter-clockwise dari gambar
         shape_detector.run()
 
