@@ -4,6 +4,7 @@ import numpy as np
 class ShapeIdentifier(KnowledgeEngine):
     result = []
 
+    #bentuk-bentuk dasar
     @Rule(Fact(jumlah_sisi = 3))
     def segitiga(self):
         self.result.append("Segitiga")
@@ -19,6 +20,19 @@ class ShapeIdentifier(KnowledgeEngine):
     @Rule(Fact(jumlah_sisi = 6))
     def segienam(self):
         self.result.append("Segi Enam")
+
+    # nice to have
+    @Rule(Fact(jumlah_sisi = P(lambda x: x > 6 and x < 15)))
+    def elips(self):
+        self.result.append("Elips")
+
+    #nice to have
+    @Rule(Fact(jumlah_sisi = P(lambda x: x > 15)))
+    def lingkaran(self):
+        self.result.append("Lingkaran")
+
+    #bentuk-bentuk advanced
+    #....
 
 if __name__ == "__main__":
     while (True):
