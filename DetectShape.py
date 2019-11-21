@@ -40,6 +40,7 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
 if __name__ == "__main__":
     filename = "images/" + input("Filename: ")
     shape = input("Shape to search for: ")
-    after = findShapes(filename, shape)
+    hit_rules, after = findShapes(filename, shape)
+    print(hit_rules)
     cv2.imshow("after", after)
     cv2.waitKey(0) # quit with pressing 0
