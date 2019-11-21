@@ -18,7 +18,8 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         # Shape Detector
         shape_detector.reset()
         shape_detector.result = []
-        shape_detector.declare(Rules.Fact(jumlah_sisi = len(approx)))
+        shape_detector.declare(Rules.Fact(jumlah_sisi = len(approx), list_of_angles = []))
+        #list_of_angles dibaca secara counter-clockwise dari gambar
         shape_detector.run()
 
         # x dan y merupakan x dan y letak shape
@@ -28,13 +29,13 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         if (shape == "All Shapes"):
             #Gambar semua shape
             cv2.drawContours(img, [approx], 0, (0), 3)
-            hit_rules += [x[1] for x in shape_detector.result]
+            hit_rules += [x[1] for x in shape_detector.result] + ['==============================================================================']
         elif ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
             cv2.drawContours(img, [approx], 0, (0), 3)
             cv2.putText(img, shape, (x,y), font, 1, (0)) #optional, mungkin gk usah
-            hit_rules += [x[1] for x in shape_detector.result]
-    
-    yield ("\n".join(hit_rules))
+            hit_rules += [x[1] for x in shape_detector.result] + ['==============================================================================']
+        
+    yield ("\n\n".join(hit_rules))
     yield img
 
 if __name__ == "__main__":
