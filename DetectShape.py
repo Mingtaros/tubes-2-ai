@@ -10,12 +10,12 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
     _, threshold = cv2.threshold(gray, 240, 255, cv2.THRESH_BINARY) #change threshold to adaptive
     contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    # print(contours)
+    shape_detector = Rules.ShapeIdentifier()
+    hit_rules = []
 
     for cnt in contours:
         approx = cv2.approxPolyDP(cnt, 0.01*cv2.arcLength(cnt, True), True)
         # Shape Detector
-        shape_detector = Rules.ShapeIdentifier()
         shape_detector.reset()
         shape_detector.result = []
         shape_detector.declare(Rules.Fact(jumlah_sisi = len(approx)))
@@ -25,25 +25,17 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         x = approx.ravel()[0]
         y = approx.ravel()[1]
 
-        if (shape == "All Shape"):
+        if (shape == "All Shapes"):
             #Gambar semua shape
             cv2.drawContours(img, [approx], 0, (0), 3)
-        elif ((shape != "All Shape") and (shape in shape_detector.result)):
+            hit_rules += [x[1] for x in shape_detector.result]
+        elif ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
             cv2.drawContours(img, [approx], 0, (0), 3)
             cv2.putText(img, shape, (x,y), font, 1, (0)) #optional, mungkin gk usah
-
-        # if len(approx) == 3:
-        #     cv2.putText(img, "Triangle", (x, y), font, 1, (0))
-        # elif len(approx) == 4:
-        #     cv2.putText(img, "Rectangle", (x, y), font, 1, (0))
-        # elif len(approx) == 5:
-        #     cv2.putText(img, "Pentagon", (x, y), font, 1, (0))
-        # elif 6 < len(approx) < 15:
-        #     cv2.putText(img, "Ellipse", (x, y), font, 1, (0))
-        # else:
-        #     cv2.putText(img, "Circle", (x, y), font, 1, (0))
-
-    return img
+            hit_rules += [x[1] for x in shape_detector.result]
+    
+    yield ("\n".join(hit_rules))
+    yield img
 
 if __name__ == "__main__":
     filename = "images/" + input("Filename: ")

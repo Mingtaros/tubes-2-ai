@@ -7,32 +7,32 @@ class ShapeIdentifier(KnowledgeEngine):
     #bentuk-bentuk dasar
     @Rule(Fact(jumlah_sisi = 3))
     def segitiga(self):
-        self.result.append("Segitiga")
+        self.result.append(("Segitiga", "(jumlah_sisi == 3) ==> Segitiga"))
     
     @Rule(Fact(jumlah_sisi = 4))
     def segiempat(self):
-        self.result.append("Segi Empat")
+        self.result.append(("Segi Empat", "(jumlah_sisi == 4) ==> Segi Empat"))
         
     @Rule(Fact(jumlah_sisi = 5))
     def segilima(self):
-        self.result.append("Segi Lima")
+        self.result.append(("Segi Lima", "(jumlah_sisi == 5) ==> Segi Lima"))
 
     @Rule(Fact(jumlah_sisi = 6))
     def segienam(self):
-        self.result.append("Segi Enam")
+        self.result.append(("Segi Enam", "(jumlah_sisi == 6) ==> Segi Enam"))
 
     # nice to have
     @Rule(Fact(jumlah_sisi = BETWEEN(7, 15))) #between bersifat inklusif [7, 15]
     def elips(self):
-        self.result.append("Elips")
+        self.result.append(("Elips", ""))
 
     #nice to have
-    @Rule(Fact(jumlah_sisi = GE(15)))
+    @Rule(Fact(jumlah_sisi = GE(16)))
     def lingkaran(self):
-        self.result.append("Lingkaran")
+        self.result.append(("Lingkaran", ""))
 
     #bentuk-bentuk advanced
-    #....
+    # ...
 
 if __name__ == "__main__":
     while (True):
