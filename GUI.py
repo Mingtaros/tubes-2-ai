@@ -102,6 +102,10 @@ def changeShape(event):
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
         image_pattern.loadImageFromPILFormat(pil_image)
+        ppImg = ImageProc.preProc
+        pil_pre_proc = Image.fromarray(ppImg)
+        image_preproc.loadImageFromPILFormat(pil_pre_proc, p=300)
+        
         if (rules_list):
             result_text.changeText('SHAPE FOUND', 'green')
         else:
