@@ -2,12 +2,14 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import DetectShape
+import ImageProc
 from PIL import Image, ImageTk
 import numpy as np
 import cv2
 
 DEFAULT_PICTURE_IMAGE = 'images/image-pick.png'
 DEFAULT_PICTURE_SHAPE = 'images/shape-pick.png'
+BACKGROUND_IMAGE = 'images/background-black.jpg'
 IMAGE_SIZE = 350
 BUTTON_WIDTH = 30
 TREE_WIDTH = 270
@@ -32,25 +34,20 @@ class imageClass:
                 self.img.destroy()
             self.image_path = image_path
             width, height = load.size[:2]
-            print('test')
             render = self.resize(height, width, load)
             self.img = Label(self.master, image=render)
-            print('test1')
             self.img.image = render
-            self.img.pack(side = 'left')
+            self.img.grid(row = 0, column = 0)
         except:
-            print('File not supported')
+            print('File tidak valid')
 
     def resize(self, height, width, load):
-        print('test5')
         if height > width:
-            print('test2')
             baseheight = self.image_size
             hpercent = (baseheight/float(load.size[1]))
             wsize = int((float(load.size[0])*float(hpercent)))
             return ImageTk.PhotoImage(load.resize((wsize, baseheight)))
         else:
-            print('test3')
             basewidth = self.image_size
             wpercent = (basewidth/float(load.size[0]))
             hsize = int((float(load.size[1])*float(wpercent)))
@@ -63,10 +60,11 @@ class imageClass:
 
     def loadImageFromPILFormat(self, image_pil):
         self.img.destroy()
-        render = ImageTk.PhotoImage(image_pil.resize((self.image_size, self.image_size)))
+        width, height = image_pil.size[:2]
+        render = self.resize(height, width, image_pil)
         self.img = Label(self.master, image=render)
         self.img.image = render
-        self.img.pack(side = 'left')
+        self.img.grid(row = 0, column = 0)
 
 class textClass:
     def __init__(self, master):
@@ -86,14 +84,6 @@ def changeShape(event):
     global rules_list
     global image_source
     global image_pattern
-<<<<<<< HEAD
-    item = tree.identify('item', event.x, event.y)
-    # Call engine
-    rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
-    cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-    pil_image = Image.fromarray(cv_image)
-    image_pattern.loadImageFromPILFormat(pil_image)
-=======
     if (image_source.image_path != DEFAULT_PICTURE_IMAGE):
         item = tree.identify('item', event.x, event.y)
         # Call engine
@@ -101,7 +91,6 @@ def changeShape(event):
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
         image_pattern.loadImageFromPILFormat(pil_image)
->>>>>>> merge
 
 def showRules():
     global rules_list
@@ -125,12 +114,14 @@ row2.pack(side = 'top')
 labelframe_input = LabelFrame(row1, text="Source Image", width=300, height=300)
 labelframe_input.pack(side = 'left')
 
+image_background = imageClass(labelframe_input, BACKGROUND_IMAGE, IMAGE_SIZE)
 image_source = imageClass(labelframe_input, DEFAULT_PICTURE_IMAGE, IMAGE_SIZE)
 
 # Pattern image
 labelframe_pattern = LabelFrame(row1, text="Detection Image")
 labelframe_pattern.pack(side = 'left')
 
+image_background_2 = imageClass(labelframe_pattern, BACKGROUND_IMAGE, IMAGE_SIZE)
 image_pattern = imageClass(labelframe_pattern, DEFAULT_PICTURE_SHAPE, IMAGE_SIZE)
 
 # Button
