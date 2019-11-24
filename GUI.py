@@ -16,8 +16,8 @@ BUTTON_WIDTH = 30
 TREE_WIDTH = 270
 TREE_HEIGHT = 18
 
-facts_list = 'tes'
-rules_list = 'tes'
+facts_list = ''
+rules_list = ''
 images_res = ''
 
 class imageClass:
@@ -75,33 +75,39 @@ class textClass:
         self.text.configure(state = 'disabled')
         self.text.bind("<1>", lambda event: self.text.focus_set())
 
-    def changeText(self, text):
+    def changeText(self, text, color):
         self.text.configure(state = 'normal')
         self.text.delete('1.0', END)
         self.text.insert(END, text)
+        self.text.configure(fg=color)
         self.text.configure(state = 'disabled')
 
 def changeShape(event):
     global rules_list
+    global facts_list
     global image_source
     global image_pattern
+    global result_text
     if (image_source.image_path != DEFAULT_PICTURE_IMAGE):
         item = tree.identify('item', event.x, event.y)
         # Call engine
-        shape_idx, rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
-        for i in shape_idx:
-            cv_image = ImageProc.gambarContour(cv_image, i)
+        rules_list, facts_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
         image_pattern.loadImageFromPILFormat(pil_image)
+        if (rules_list):
+            result_text.changeText('SHAPE FOUND', 'green')
+        else:
+            result_text.changeText('SHAPE NOT FOUND', 'red')
+
 
 def showRules():
     global rules_list
-    rules_container.changeText(rules_list)
+    rules_container.changeText(rules_list, 'black')
 
 def showFacts():
-    global rules_list
-    facts_container.changeText(rules_list)
+    global facts_list
+    facts_container.changeText(facts_list, 'black')
 
 def openEditor():
     file = "Rules.py"
