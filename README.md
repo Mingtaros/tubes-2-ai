@@ -8,11 +8,12 @@ Find All &lt;shape> in image using OpenCV - Rule Based System
 4. Tkinter Python library (Graphical User Interface)
 
 ## How to Run the Program
-1. Run `python GUI.py`.
-2. Select Image from your files.
-3. Select Shape from the Dropdown.
-4. To Show Rules Triggered, Click on 'Show Rules'
-5. To Show Facts Made, Click on 'Show Facts'
+1. Go to `src` Directory. 
+2. Run `python GUI.py`.
+3. Select Image from your files.
+4. Select Shape from the Dropdown.
+5. To Show Rules Triggered, Click on 'Show Rules'
+6. To Show Facts Made, Click on 'Show Facts'
 
 ## Our Group
 <table>
