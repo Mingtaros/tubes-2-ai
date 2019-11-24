@@ -115,7 +115,6 @@ def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     sudutPoly = []
     # print(tree[0][22])
     for i in range(min(len(conArea), maxNumContour)):
-            # print(" YES")
     #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
             approx = simplifikasiTitik([a[0] for a in approx], 20) #pixel
@@ -126,22 +125,15 @@ def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
             #     ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
             if(len(approx) > 2):
                 sudut = []
-                # print(conArea[i][0]," ",approx, end=" ")
-                print(conArea[i][0], " =   ",   approx, end=" | ")
                 for j in range(len(approx)-2):
-                    # print(j, end=", ")
                     p1 = approx[j]
                     p2 = approx[j+1]
                     p3 = approx[j+2]
                     sudut.append(sudutTigaTitik(p1, p2, p3))
-                # print("")
                 sudut.append(sudutTigaTitik(approx[j+1], approx[j+2], approx[0]))
                 sudut.append(sudutTigaTitik(approx[j+2], approx[0], approx[1]))
                 sudutPoly.append((conArea[i][0], sudut))
-                # print(conArea[i][0], " | ", sudut, " | ", approx)
-    # show(ctr,"bangsat")
-    # print(sudutPoly)
-    # print(contour[22])
+
     return sudutPoly
 
 def gambarContour(img, idx):
