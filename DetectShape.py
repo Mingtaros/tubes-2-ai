@@ -24,7 +24,6 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
             shape_idx.append(img_idx)
             hit_facts.append((img_idx, angles))
 
-    yield shape_idx
     yield ("\n".join(hit_rules))
     yield ("\n".join([str(x) + " | " + str(y) for x, y in hit_facts]))
 
@@ -36,10 +35,7 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
 # if __name__ == "__main__":
 #     filename = "images/" + "test_shape.jpg"#input("Filename: ")
 #     shape = input("Shape to search for: ")
-#     shape_idx, hit_rules, hit_facts, after = findShapes(filename, shape)
+#     hit_rules, hit_facts, after = findShapes(filename, shape)
 #     print(hit_rules)
 #     print(hit_facts)
-#     print(shape_idx)
-#     for i in shape_idx:
-#         after = ImageProc.gambarContour(after, i)
 #     ImageProc.show(after, "WOW")
