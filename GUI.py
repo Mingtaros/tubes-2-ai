@@ -18,6 +18,7 @@ TREE_HEIGHT = 18
 facts_list = 'tes'
 rules_list = 'tes'
 images_res = ''
+shape_choice = ""
 
 class imageClass:
     def __init__(self, master, image_path, image_size):
@@ -84,15 +85,35 @@ def changeShape(event):
     global rules_list
     global image_source
     global image_pattern
+    global shape_choice
     if (image_source.image_path != DEFAULT_PICTURE_IMAGE):
         item = tree.identify('item', event.x, event.y)
+        shape_choice = item
         # Call engine
-        shape_idx, rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
+        imgParam = [d.get(), sigmaColor.get(), sigmaSpace.get(), kSize.get(), thres.get()]
+        shape_idx, rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"), imgParam)
         for i in shape_idx:
             cv_image = ImageProc.gambarContour(cv_image, i)
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
         image_pattern.loadImageFromPILFormat(pil_image)
+
+def updateGambar(event):
+    global shape_choice
+    global image_pattern
+    if(shape_choice != ""):
+        imgParam = [d.get(), sigmaColor.get(), sigmaSpace.get(), kSize.get(), thres.get()]
+        shape_idx, rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(shape_choice, "text"), imgParam)
+        for i in shape_idx:
+            cv_image = ImageProc.gambarContour(cv_image, i)
+        cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(cv_image)
+        image_pattern.loadImageFromPILFormat(pil_image)
+        ppImg = ImageProc.preProc
+        pil_pre_proc = Image.fromarray(ppImg)
+        image_preproc.loadImageFromPILFormat(pil_pre_proc)
+        
+
 
 def showRules():
     global rules_list
@@ -102,15 +123,29 @@ def showFacts():
     facts_container.changeText(rules_list)
 
 root = Tk()
-root.geometry("1000x700")
+root.geometry("1400x700")
 root.resizable(0, 0)
 root.title('Image Detection')
 
 # Row Container
-row1 = Frame(root)
+rowKiri = Frame(root)
+rowKiri.pack(side = 'left')
+rowKanan = Frame(root)
+rowKanan.pack(side = 'right')
+row1 = Frame(rowKiri)
 row1.pack(side = 'top')
-row2 = Frame(root)
+row2 = Frame(rowKiri)
 row2.pack(side = 'top')
+row3 = Frame(rowKiri)
+row3.pack(side = 'top')
+row31 = Frame(row3)
+row31.pack(side='left')
+row32 = Frame(row3)
+row32.pack(side='left')
+row33 = Frame(row3)
+row33.pack(side='left')
+rowPP = Frame(rowKanan)
+rowPP.pack(side = 'left')
 
 # Source image
 labelframe_input = LabelFrame(row1, text="Source Image", width=300, height=300)
@@ -125,6 +160,13 @@ labelframe_pattern.pack(side = 'left')
 
 image_background_2 = imageClass(labelframe_pattern, BACKGROUND_IMAGE, IMAGE_SIZE)
 image_pattern = imageClass(labelframe_pattern, DEFAULT_PICTURE_SHAPE, IMAGE_SIZE)
+
+# PreProcessing Image
+labelframe_preproc = LabelFrame(rowPP, text="Pre Processing Image")
+labelframe_preproc.pack(side = 'left')
+
+image_background_3 = imageClass(labelframe_preproc, BACKGROUND_IMAGE, IMAGE_SIZE)
+image_preproc = imageClass(labelframe_preproc, DEFAULT_PICTURE_SHAPE, IMAGE_SIZE)
 
 # Button
 button_container = Label(row1)
@@ -198,5 +240,30 @@ labelframe_fact = LabelFrame(row2, text="Matched Facts")
 labelframe_fact.pack(side = 'left')
 
 facts_container = textClass(labelframe_fact)
+
+d = IntVar()
+d.set(14)
+scale = Scale( row31, command=updateGambar, to=50, label="d", variable = d , orient=HORIZONTAL, length=300)
+scale.pack(side = 'top')   
+
+sigmaColor = IntVar()
+sigmaColor.set(93)
+scale = Scale( row31, command=updateGambar, to=200, label="sigmaColor", variable = sigmaColor , orient=HORIZONTAL, length=300)
+scale.pack(side = 'top')   
+
+sigmaSpace = IntVar()
+sigmaSpace.set(71)
+scale = Scale( row32, command=updateGambar, to=200, label="sigmaSpace", variable = sigmaSpace , orient=HORIZONTAL, length=300)
+scale.pack(side = 'top')   
+
+kSize = IntVar()
+kSize.set(6)
+scale = Scale( row32, command=updateGambar, to=10, label="kSize", variable = kSize , orient=HORIZONTAL, length=300)
+scale.pack(side = 'top')   
+
+thres = IntVar()
+thres.set(47)
+scale = Scale( row33, command=updateGambar, to=255, label="thres", variable = thres , orient=HORIZONTAL, length=300)
+scale.pack(side = 'top')   
 
 root.mainloop()

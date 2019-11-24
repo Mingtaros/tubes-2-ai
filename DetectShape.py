@@ -2,9 +2,9 @@ import cv2
 import Rules
 import ImageProc
 
-def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "images/" diawal
+def findShapes(filename, shape, imgParam): # diasumsikan filename sudah ditambahkan "images/" diawal
     img = cv2.imread(filename)
-    indexed_angles = ImageProc.process(img)
+    indexed_angles = ImageProc.process(img, imgParam[0], imgParam[1], imgParam[2], imgParam[3], imgParam[4])
 
     shape_detector = Rules.ShapeIdentifier()
 

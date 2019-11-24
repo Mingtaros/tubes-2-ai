@@ -61,33 +61,27 @@ def simplifikasiTitik(has, epsTitik):
     titikSimple = [h for idx, h in enumerate(has) if idx not in delSoon]
     return titikSimple
 
-def createTrackbar():
-    cv2.namedWindow('setting')
-    cv2.createTrackbar('d', 'setting', 14, 50, sekip)
-    cv2.createTrackbar('sigmaColor', 'setting', 93, 200, sekip)
-    cv2.createTrackbar('sigmaSpace', 'setting', 71, 200, sekip)
-    cv2.createTrackbar('kSize', 'setting', 6, 10, sekip)
-    cv2.createTrackbar('thres', 'setting', 47, 255, sekip)
+preProc = None
 
-def preProcImg(img):
-    # createTrackbar()
+def preProcImg(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
+    global preProc
     sigma = 0.33
     pp = img.copy()
 
     #Smoothing Image
-    d = 15 # cv2.getTrackbarPos('d', 'setting')+1
-    sigmaColor = 93 # cv2.getTrackbarPos('sigmaColor', 'setting')
-    sigmaSpace = 71 # cv2.getTrackbarPos('sigmaSpace', 'setting')
+    # d = 15 # cv2.getTrackbarPos('d', 'setting')+1
+    # sigmaColor = 93 # cv2.getTrackbarPos('sigmaColor', 'setting')
+    # sigmaSpace = 71 # cv2.getTrackbarPos('sigmaSpace', 'setting')
     pp = cv2.bilateralFilter(pp, d, sigmaColor, sigmaSpace)
     pp = cv2.cvtColor(pp, cv2.COLOR_BGR2GRAY)
     
     #Morphology Transformation
-    kSize = 6 # cv2.getTrackbarPos('kSize', 'setting')
+    # kSize = 6 # cv2.getTrackbarPos('kSize', 'setting')
     kernel = np.ones((kSize, kSize), np.uint8)
     pp = cv2.morphologyEx(pp, cv2.MORPH_GRADIENT, kernel)
     
     #Thresholding
-    thres = 47 # cv2.getTrackbarPos('thres', 'setting')
+    # thres = 47 # cv2.getTrackbarPos('thres', 'setting')
     pp = cv2.threshold(pp,thres,255,cv2.THRESH_BINARY_INV)
     pp = cv2.bitwise_not(pp[1])
     
@@ -97,17 +91,18 @@ def preProcImg(img):
     upper = int(min(255, (1.0 + sigma) * v))
     pp = cv2.Canny(pp, lower, upper)
     pp = cv2.copyTo(img, pp)
+    preProc = pp
     pp = cv2.cvtColor(pp, cv2.COLOR_BGR2GRAY)
     return pp
 
 
 contour = []
 
-def process(img):
+def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     global contour
     ctr = img.copy()
     
-    pp = preProcImg(img)
+    pp = preProcImg(img, d, sigmaColor, sigmaSpace, kSize, thres)
 
     #Contour detection
     contour, tree = cv2.findContours(pp, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
