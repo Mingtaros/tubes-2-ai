@@ -9,7 +9,7 @@ def sekip(x):
 
 def show(x, name):
     cv2.imshow(name, x)
-    print(cv2.waitKey(0))
+    cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 def sudutTigaTitik(a, b, c):
@@ -119,6 +119,7 @@ def process(img):
             # print(" YES")
     #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
+            approx = simplifikasiTitik([a[0] for a in approx], 20) #pixel
             color = (randint(0, 255), randint(0, 255), randint(0, 255))
             ctr = cv2.drawContours(ctr, contour, 22, color, 3)
             # for a in approx:
@@ -129,15 +130,15 @@ def process(img):
                 # print(conArea[i][0]," ",approx, end=" ")
                 for j in range(len(approx)-2):
                     # print(j, end=", ")
-                    p1 = approx[j][0]
-                    p2 = approx[j+1][0]
-                    p3 = approx[j+2][0]
+                    p1 = approx[j]
+                    p2 = approx[j+1]
+                    p3 = approx[j+2]
                     sudut.append(sudutTigaTitik(p1, p2, p3))
                 # print("")
-                sudut.append(sudutTigaTitik(approx[j][0], approx[j+1][0], approx[0][0]))
-                sudut.append(sudutTigaTitik(approx[j+1][0], approx[0][0], approx[1][0]))
+                sudut.append(sudutTigaTitik(approx[j+1], approx[j+2], approx[0]))
+                sudut.append(sudutTigaTitik(approx[j+2], approx[0], approx[1]))
                 sudutPoly.append((conArea[i][0], sudut))
-                print(conArea[i][0], " | ", sudut, " | ", approx)
+                # print(conArea[i][0], " | ", sudut, " | ", approx)
     # show(ctr,"bangsat")
     # print(sudutPoly)
     # print(contour[22])
@@ -147,7 +148,7 @@ def gambarContour(img, idx):
     global contour
     color = (randint(0, 255), randint(0, 255), randint(0, 255))
     x, y = contour[idx][0][0]
-    print(x, ' ', y)
+    # print(x, ' ', y)
     img = cv2.putText(img, str(idx), (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 1)
     # color = (0, 0, 255)
     # print(contour[idx])

@@ -1,7 +1,7 @@
 from experta import *
 import numpy as np
 
-degree_epsilon = 3
+degree_epsilon = 5
 
 def isSame(deg1, deg2):
     return (deg2-degree_epsilon <= deg1 <= deg2+degree_epsilon)
@@ -87,8 +87,9 @@ class ShapeIdentifier(KnowledgeEngine):
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(4)))
     def trapesium_sama_kaki(self, Fact):
-        if (not isExistElementInErrorRange(Fact['list_of_angles'], 90, degree_epsilon)) and ((isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][1]) and isSame(Fact['list_of_angles'][2], Fact['list_of_angles'][3]) and not isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][2])) or
-           (isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][3]) and isSame(Fact['list_of_angles'][1], Fact['list_of_angles'][2]) and not isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][1]))):
+        if ((not isExistElementInErrorRange(Fact['list_of_angles'], 90, degree_epsilon)) and 
+            ((isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][1]) and isSame(Fact['list_of_angles'][2], Fact['list_of_angles'][3]) and not isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][2])) or
+             (isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][3]) and isSame(Fact['list_of_angles'][1], Fact['list_of_angles'][2]) and not isSame(Fact['list_of_angles'][0], Fact['list_of_angles'][1])))):
             self.result.append(("Trapesium", "(jumlah_sudut == 4) && ((angle_1 == angle_2 && angle_3 == angle_4) || (angle_1 == angle_4 && angle_2 == angle_3)) || (index_tumpul < index_lancip) || (index_tumpul > index_lancip) ==> Trapesium"))
             self.result.append(("Trapesium Sama Kaki", "(jumlah_sudut == 4) && (angle_1 == angle_2 && angle_3 == angle_4) || (angle_1 == angle_4 && angle_2 == angle_3) ==> Trapesium Sama Kaki"))
 
