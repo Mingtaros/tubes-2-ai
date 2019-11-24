@@ -7,6 +7,11 @@ from functools import reduce
 def sekip(x):
     pass
 
+def show(x, name):
+    cv2.imshow(name, x)
+    print(cv2.waitKey(0))
+    cv2.destroyAllWindows()
+
 def sudutTigaTitik(a, b, c):
     # Return sudut antara garis a-b dan b-c
     vAB = b - a
@@ -16,7 +21,10 @@ def sudutTigaTitik(a, b, c):
     dAB = norm(vAB)
     dBC = norm(vBC)
     
-    return np.rad2deg(np.arccos(dot/(dAB*dBC)))
+    temp = dot/(dAB * dBC)
+    temp = max(temp, -1)
+    temp = min(temp, 1)
+    return np.rad2deg(np.arccos(temp))
 
 def DouglasPeucker(titik, eps):
     dmax = 0
@@ -92,10 +100,11 @@ def preProcImg(img):
 contour = []
 
 def process(img):
+    global contour
     ctr = img.copy()
     
     pp = preProcImg(img)
-    
+
     #Contour detection
     contour, tree = cv2.findContours(pp, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     conArea = [(i,cv2.contourArea(c)) for i,c in enumerate(contour)]
@@ -105,27 +114,42 @@ def process(img):
     epsTitik = 30
         
     sudutPoly = []
+    # print(tree[0][22])
     for i in range(min(len(conArea), maxNumContour)):
-        # color = (randint(0, 255), randint(0, 255), randint(0, 255))
-        # ctr = cv2.drawContours(ctr, contour, conArea[i][0], color, 3)
-#         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
-        approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
-        # for a in approx:
-        #     x,y = a[0]
-        #     ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
-        if(len(approx) > 2):
-            sudut = []
-            for i in range(len(approx)-2):
-                p1 = approx[i][0]
-                p2 = approx[i+1][0]
-                p3 = approx[i+2][0]
-                sudut.append(sudutTigaTitik(p1, p2, p3))
-            sudut.append(sudutTigaTitik(approx[i][0], approx[i+1][0], approx[0][0]))
-            sudutPoly.append((conArea[i][0], sudut))
-
+            # print(" YES")
+    #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
+            approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
+            color = (randint(0, 255), randint(0, 255), randint(0, 255))
+            ctr = cv2.drawContours(ctr, contour, 22, color, 3)
+            # for a in approx:
+            #     x,y = a[0]
+            #     ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
+            if(len(approx) > 2):
+                sudut = []
+                # print(conArea[i][0]," ",approx, end=" ")
+                for j in range(len(approx)-2):
+                    # print(j, end=", ")
+                    p1 = approx[j][0]
+                    p2 = approx[j+1][0]
+                    p3 = approx[j+2][0]
+                    sudut.append(sudutTigaTitik(p1, p2, p3))
+                # print("")
+                sudut.append(sudutTigaTitik(approx[j][0], approx[j+1][0], approx[0][0]))
+                sudut.append(sudutTigaTitik(approx[j+1][0], approx[0][0], approx[1][0]))
+                sudutPoly.append((conArea[i][0], sudut))
+                print(conArea[i][0], " | ", sudut, " | ", approx)
+    # show(ctr,"bangsat")
+    # print(sudutPoly)
+    # print(contour[22])
     return sudutPoly
 
 def gambarContour(img, idx):
+    global contour
     color = (randint(0, 255), randint(0, 255), randint(0, 255))
+    x, y = contour[idx][0][0]
+    print(x, ' ', y)
+    img = cv2.putText(img, str(idx), (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 1)
+    # color = (0, 0, 255)
+    # print(contour[idx])
     return cv2.drawContours(img, contour, idx, color, 3)
     
