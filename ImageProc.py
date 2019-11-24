@@ -88,14 +88,17 @@ def preProcImg(img):
     pp = cv2.cvtColor(pp, cv2.COLOR_BGR2GRAY)
     return pp
 
+
+contour = []
+
 def process(img):
     ctr = img.copy()
     
     pp = preProcImg(img)
     
     #Contour detection
-    con, tree = cv2.findContours(pp, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    conArea = [(i,cv2.contourArea(c)) for i,c in enumerate(con)]
+    contour, tree = cv2.findContours(pp, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    conArea = [(i,cv2.contourArea(c)) for i,c in enumerate(contour)]
     conArea.sort(key=lambda x : x[1], reverse=True)
     maxNumContour = 30
     eps = 30
@@ -103,13 +106,13 @@ def process(img):
         
     sudutPoly = []
     for i in range(min(len(conArea), maxNumContour)):
-        color = (randint(0, 255), randint(0, 255), randint(0, 255))
-        ctr = cv2.drawContours(ctr, con, conArea[i][0], color, 3)
+        # color = (randint(0, 255), randint(0, 255), randint(0, 255))
+        # ctr = cv2.drawContours(ctr, contour, conArea[i][0], color, 3)
 #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
-        approx = cv2.approxPolyDP(con[conArea[i][0]], 0.01*cv2.arcLength(con[conArea[i][0]], True), True)
-        for a in approx:
-            x,y = a[0]
-            ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
+        approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
+        # for a in approx:
+        #     x,y = a[0]
+        #     ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
         if(len(approx) > 2):
             sudut = []
             for i in range(len(approx)-2):
@@ -121,4 +124,8 @@ def process(img):
             sudutPoly.append((conArea[i][0], sudut))
 
     return sudutPoly
+
+def gambarContour(img, idx):
+    color = (randint(0, 255), randint(0, 255), randint(0, 255))
+    return cv2.drawContours(img, contour, idx, color, 3)
     
