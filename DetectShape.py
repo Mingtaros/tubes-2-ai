@@ -1,3 +1,13 @@
+# Tugas Besar 2
+# IF3170 Intelegensi Buatan
+# Anggota:
+#   13517013 / Aditya Putra Santosa
+#   13517048 / Leonardo
+#   13517054 / Vinsen Marselino Andreas
+#   13517124 / Arvin Yustin
+# File: DetectShape.py
+# Deskripsi: Fitur mendeteksi setiap bentuk yang dicari sesuai keinginan user 
+
 import cv2
 import Rules
 import ImageProc

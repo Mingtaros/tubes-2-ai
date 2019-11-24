@@ -1,3 +1,13 @@
+# Tugas Besar 2
+# IF3170 Intelegensi Buatan
+# Anggota:
+#   13517013 / Aditya Putra Santosa
+#   13517048 / Leonardo
+#   13517054 / Vinsen Marselino Andreas
+#   13517124 / Arvin Yustin
+# File: ImageProc.py
+# Deskripsi: Penggunaan OpenCV dalam mendeteksi Contour dan sudut untuk dievaluasi Rule-Based System
+
 import cv2
 from random import randint
 import numpy as np
@@ -54,9 +64,6 @@ def simplifikasiTitik(has, epsTitik):
     for i, h in enumerate(has):
         for j, cek in enumerate(has):
             if(norm(cek-h) < epsTitik and i < j):
-                # print("cek : ", cek)
-                # print("h : ", h)
-                # print("norm : ", norm(cek-h))
                 delSoon.update({j})
     titikSimple = [h for idx, h in enumerate(has) if idx not in delSoon]
     return titikSimple
@@ -69,19 +76,14 @@ def preProcImg(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     pp = img.copy()
 
     #Smoothing Image
-    # d = 15 # cv2.getTrackbarPos('d', 'setting')+1
-    # sigmaColor = 93 # cv2.getTrackbarPos('sigmaColor', 'setting')
-    # sigmaSpace = 71 # cv2.getTrackbarPos('sigmaSpace', 'setting')
     pp = cv2.bilateralFilter(pp, d, sigmaColor, sigmaSpace)
     pp = cv2.cvtColor(pp, cv2.COLOR_BGR2GRAY)
     
     #Morphology Transformation
-    # kSize = 6 # cv2.getTrackbarPos('kSize', 'setting')
     kernel = np.ones((kSize, kSize), np.uint8)
     pp = cv2.morphologyEx(pp, cv2.MORPH_GRADIENT, kernel)
     
     #Thresholding
-    # thres = 47 # cv2.getTrackbarPos('thres', 'setting')
     pp = cv2.threshold(pp,thres,255,cv2.THRESH_BINARY_INV)
     pp = cv2.bitwise_not(pp[1])
     
@@ -117,8 +119,6 @@ def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     for i in range(min(len(conArea), maxNumContour)):
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
             approx = simplifikasiTitik([a[0] for a in approx], 20) #pixel
-            # color = (randint(0, 255), randint(0, 255), randint(0, 255))
-            # ctr = cv2.drawContours(ctr, contour, conArea[i][0], color, 3)
             
             if(len(approx) > 2):
                 sudut = []
@@ -137,9 +137,6 @@ def gambarContour(img, idx):
     global contour
     color = (randint(0, 255), randint(0, 255), randint(0, 255))
     x, y = contour[idx][0][0]
-    # print(x, ' ', y)
     img = cv2.putText(img, str(idx), (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 1)
-    # color = (0, 0, 255)
-    # print(contour[idx])
     return cv2.drawContours(img, contour, idx, color, 5)
     

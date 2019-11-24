@@ -1,3 +1,13 @@
+# Tugas Besar 2
+# IF3170 Intelegensi Buatan
+# Anggota:
+#   13517013 / Aditya Putra Santosa
+#   13517048 / Leonardo
+#   13517054 / Vinsen Marselino Andreas
+#   13517124 / Arvin Yustin
+# File: Rules.py
+# Deskripsi: Pengimplementasian Rule-Based System untuk Deteksi Bentuk
+
 from experta import *
 import numpy as np
 

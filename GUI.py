@@ -1,3 +1,13 @@
+# Tugas Besar 2
+# IF3170 Intelegensi Buatan
+# Anggota:
+#   13517013 / Aditya Putra Santosa
+#   13517048 / Leonardo
+#   13517054 / Vinsen Marselino Andreas
+#   13517124 / Arvin Yustin
+# File: GUI.py
+# Deskripsi: GUI yang ditampilkan pada penjalanan program
+
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
@@ -95,9 +105,6 @@ def changeShape(event):
         shape_choice = item
         # Call engine
         imgParam = [d.get(), sigmaColor.get(), sigmaSpace.get(), kSize.get(), thres.get()]
-        # rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"), imgParam)
-        # for i in shape_idx:
-        #     cv_image = ImageProc.gambarContour(cv_image, i)
         rules_list, facts_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"), imgParam)
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
@@ -120,8 +127,6 @@ def updateGambar(event):
     if(shape_choice != ""):
         imgParam = [d.get(), sigmaColor.get(), sigmaSpace.get(), kSize.get(), thres.get()]
         rules_list, facts_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(shape_choice, "text"), imgParam)
-        # for i in shape_idx:
-        #     cv_image = ImageProc.gambarContour(cv_image, i)
         cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
         pil_image = Image.fromarray(cv_image)
         image_pattern.loadImageFromPILFormat(pil_image)
