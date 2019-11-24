@@ -98,9 +98,7 @@ class ShapeIdentifier(KnowledgeEngine):
         n_siku = len([x for x in Fact['list_of_angles'] if (90-degree_epsilon <= x <= 90+degree_epsilon)])
         n_tumpul = len([x for x in Fact['list_of_angles'] if (x > 90-degree_epsilon)])
         n_lancip = len([x for x in Fact['list_of_angles'] if (x < 90+degree_epsilon)])
-        # print("n_siku:", n_siku)
-        # print("n_tumpul:", n_tumpul)
-        # print("n_lancip:", n_lancip)
+        
         if (n_siku >= 2):
             index_tumpul = Fact['list_of_angles'].index(max(Fact['list_of_angles']))
             index_lancip = Fact['list_of_angles'].index(min(Fact['list_of_angles']))

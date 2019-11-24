@@ -115,14 +115,11 @@ def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     sudutPoly = []
     # print(tree[0][22])
     for i in range(min(len(conArea), maxNumContour)):
-    #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
             approx = simplifikasiTitik([a[0] for a in approx], 20) #pixel
             color = (randint(0, 255), randint(0, 255), randint(0, 255))
             ctr = cv2.drawContours(ctr, contour, 22, color, 3)
-            # for a in approx:
-            #     x,y = a[0]
-            #     ctr = cv2.circle(ctr, (x, y), 3, (0, 0, 255), 3)
+            
             if(len(approx) > 2):
                 sudut = []
                 for j in range(len(approx)-2):

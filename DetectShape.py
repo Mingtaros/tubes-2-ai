@@ -32,10 +32,3 @@ def findShapes(filename, shape, imgParam): # diasumsikan filename sudah ditambah
 
     yield img
 
-# if __name__ == "__main__":
-#     filename = "images/" + "test_shape.jpg"#input("Filename: ")
-#     shape = input("Shape to search for: ")
-#     hit_rules, hit_facts, after = findShapes(filename, shape)
-#     print(hit_rules)
-#     print(hit_facts)
-#     ImageProc.show(after, "WOW")
