@@ -19,7 +19,7 @@ def findShapes(filename, shape, imgParam): # diasumsikan filename sudah ditambah
         shape_detector.declare(Rules.Fact(jumlah_sudut = len(angles), list_of_angles = angles))
         shape_detector.run()
 
-        if (shape == "All Shapes") or ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
+        if ((shape == "All Shapes") and (shape_detector.result)) or ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
             hit_rules += [x[1] for x in shape_detector.result] + ['\n========================================']
             shape_idx.append(img_idx)
             hit_facts.append((img_idx, angles))
