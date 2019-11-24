@@ -27,6 +27,7 @@ def findShapes(filename, shape, imgParam): # diasumsikan filename sudah ditambah
     yield ("\n".join(hit_rules))
     yield ("\n".join([str(x) + " | " + str(y) for x, y in hit_facts]))
 
+    # print(shape_idx)
     for i in shape_idx:
         img = ImageProc.gambarContour(img, i)
 

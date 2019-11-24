@@ -100,7 +100,7 @@ contour = []
 
 def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     global contour
-    ctr = img.copy()
+    # ctr = img.copy()
     
     pp = preProcImg(img, d, sigmaColor, sigmaSpace, kSize, thres)
 
@@ -117,8 +117,8 @@ def process(img, d=15, sigmaColor=93, sigmaSpace=71, kSize=6, thres=47):
     for i in range(min(len(conArea), maxNumContour)):
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
             approx = simplifikasiTitik([a[0] for a in approx], 20) #pixel
-            color = (randint(0, 255), randint(0, 255), randint(0, 255))
-            ctr = cv2.drawContours(ctr, contour, 22, color, 3)
+            # color = (randint(0, 255), randint(0, 255), randint(0, 255))
+            # ctr = cv2.drawContours(ctr, contour, conArea[i][0], color, 3)
             
             if(len(approx) > 2):
                 sudut = []
@@ -141,5 +141,5 @@ def gambarContour(img, idx):
     img = cv2.putText(img, str(idx), (x, y), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 0), 1)
     # color = (0, 0, 255)
     # print(contour[idx])
-    return cv2.drawContours(img, contour, idx, color, 3)
+    return cv2.drawContours(img, contour, idx, color, 5)
     
