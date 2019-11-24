@@ -124,7 +124,6 @@ class ShapeIdentifier(KnowledgeEngine):
         if (len(set([120 for x in Fact['list_of_angles'] if (x-degree_epsilon <= 120 <= x+degree_epsilon)])) == 1 and (120-degree_epsilon <= Fact['list_of_angles'][0] <= 120+degree_epsilon)):
             self.result.append(("Segi Enam Sama Sisi", "(jumlah_sudut == 6) && (angle_1 == angle_2 == angle_3 == angle_4 == angle_5 == angle_6) && (angle_1 == 120) ==> Segi Enam Sama Sisi"))
 
-
 if __name__ == "__main__":
     while (True):
         shape_detector = ShapeIdentifier()
