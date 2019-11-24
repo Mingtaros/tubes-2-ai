@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+import subprocess
 import DetectShape
 import ImageProc
 from PIL import Image, ImageTk
@@ -99,7 +100,13 @@ def showRules():
     rules_container.changeText(rules_list)
 
 def showFacts():
+    global rules_list
     facts_container.changeText(rules_list)
+
+def openEditor():
+    file = "Rules.py"
+    # os.system("gedit " + file)
+    subprocess.run(["gedit", file])
 
 root = Tk()
 root.geometry("1000x700")
@@ -133,7 +140,7 @@ button_container.pack(side = 'left')
 btn_open_image = Button(button_container, text='Open Image', width = BUTTON_WIDTH, command = image_source.changeImage)
 btn_open_image.pack(side = 'top', pady = 4)
 
-btn_open_rule = Button(button_container, text='Open Rule Editor', width = BUTTON_WIDTH)
+btn_open_rule = Button(button_container, text='Open Rule Editor', width = BUTTON_WIDTH, command = openEditor)
 btn_open_rule.pack(side = 'top', pady = 4)
 
 btn_show_rule = Button(button_container, text='Show Rules', width = BUTTON_WIDTH, command = showRules)
