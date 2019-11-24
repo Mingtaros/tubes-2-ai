@@ -58,24 +58,24 @@ def createTrackbar():
     cv2.createTrackbar('thres', 'setting', 47, 255, sekip)
 
 def preProcImg(img):
-    createTrackbar()
+    # createTrackbar()
     sigma = 0.33
     pp = img.copy()
 
     #Smoothing Image
-    d = cv2.getTrackbarPos('d', 'setting')+1
-    sigmaColor = cv2.getTrackbarPos('sigmaColor', 'setting')
-    sigmaSpace =cv2.getTrackbarPos('sigmaSpace', 'setting')
+    d = 15 # cv2.getTrackbarPos('d', 'setting')+1
+    sigmaColor = 93 # cv2.getTrackbarPos('sigmaColor', 'setting')
+    sigmaSpace = 71 # cv2.getTrackbarPos('sigmaSpace', 'setting')
     pp = cv2.bilateralFilter(pp, d, sigmaColor, sigmaSpace)
     pp = cv2.cvtColor(pp, cv2.COLOR_BGR2GRAY)
     
     #Morphology Transformation
-    kSize = cv2.getTrackbarPos('kSize', 'setting')
+    kSize = 6 # cv2.getTrackbarPos('kSize', 'setting')
     kernel = np.ones((kSize, kSize), np.uint8)
     pp = cv2.morphologyEx(pp, cv2.MORPH_GRADIENT, kernel)
     
     #Thresholding
-    thres = cv2.getTrackbarPos('thres', 'setting')
+    thres = 47 # cv2.getTrackbarPos('thres', 'setting')
     pp = cv2.threshold(pp,thres,255,cv2.THRESH_BINARY_INV)
     pp = cv2.bitwise_not(pp[1])
     
