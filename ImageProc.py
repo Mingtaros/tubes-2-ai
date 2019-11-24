@@ -50,9 +50,13 @@ def DouglasPeucker(titik, eps):
 
 def simplifikasiTitik(has, epsTitik):
     delSoon = set([])
+    # print(has)
     for i, h in enumerate(has):
         for j, cek in enumerate(has):
             if(norm(cek-h) < epsTitik and i < j):
+                # print("cek : ", cek)
+                # print("h : ", h)
+                # print("norm : ", norm(cek-h))
                 delSoon.update({j})
     titikSimple = [h for idx, h in enumerate(has) if idx not in delSoon]
     return titikSimple
@@ -128,6 +132,7 @@ def process(img):
             if(len(approx) > 2):
                 sudut = []
                 # print(conArea[i][0]," ",approx, end=" ")
+                print(conArea[i][0], " =   ",   approx, end=" | ")
                 for j in range(len(approx)-2):
                     # print(j, end=", ")
                     p1 = approx[j]
