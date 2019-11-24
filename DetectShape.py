@@ -3,7 +3,7 @@ import Rules
 
 def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "images/" diawal
     font = cv2.FONT_HERSHEY_COMPLEX
-
+    print(filename, shape)
     img = cv2.imread(filename)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) #grayscaled image to find threshold and contours
@@ -34,15 +34,14 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         elif ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
             cv2.drawContours(img, [approx], 0, (0), 3)
             cv2.putText(img, shape, (x,y), font, 1, (0)) #optional, mungkin gk usah
-            hit_rules += [x[1] for x in shape_detector.result] + ['==============================================================================']
-        
-    yield ("\n\n".join(hit_rules))
+            hit_rules += [x[1] for x in shape_detector.result]
+    yield ("\n".join(hit_rules))
     yield img
 
-if __name__ == "__main__":
-    filename = "images/" + input("Filename: ")
-    shape = input("Shape to search for: ")
-    hit_rules, after = findShapes(filename, shape)
-    print(hit_rules)
-    cv2.imshow("after", after)
-    cv2.waitKey(0) # quit with pressing 0
+# if __name__ == "__main__":
+#     filename = "images/" + input("Filename: ")
+#     shape = input("Shape to search for: ")
+#     hit_rules, after = findShapes(filename, shape)
+#     print(hit_rules)
+#     cv2.imshow("after", after)
+#     cv2.waitKey(0) # quit with pressing 0

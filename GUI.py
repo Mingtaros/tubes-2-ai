@@ -1,31 +1,72 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+import DetectShape
 from PIL import Image, ImageTk
+import numpy as np
+import cv2
 
+DEFAULT_PICTURE_IMAGE = 'images/image-pick.png'
+DEFAULT_PICTURE_SHAPE = 'images/shape-pick.png'
 IMAGE_SIZE = 350
 BUTTON_WIDTH = 30
 TREE_WIDTH = 270
 TREE_HEIGHT = 18
 
+facts_list = 'tes'
+rules_list = 'tes'
+images_res = ''
+
 class imageClass:
     def __init__(self, master, image_path, image_size):
         self.master = master
         self.img = ''
+        self.image_path = image_path
         self.image_size = image_size
         self.loadImage(image_path)
     
     def loadImage(self, image_path):
-        load = Image.open(image_path)
-        render = ImageTk.PhotoImage(load.resize((self.image_size, self.image_size)))
-        self.img = Label(self.master, image=render)
-        self.img.image = render
-        self.img.pack(side = 'left')
+        try:
+            load = Image.open(image_path)
+            if (self.img != ''):
+                self.img.destroy()
+            self.image_path = image_path
+            width, height = load.size[:2]
+            print('test')
+            render = self.resize(height, width, load)
+            self.img = Label(self.master, image=render)
+            print('test1')
+            self.img.image = render
+            self.img.pack(side = 'left')
+        except:
+            print('File not supported')
+
+    def resize(self, height, width, load):
+        print('test5')
+        if height > width:
+            print('test2')
+            baseheight = self.image_size
+            hpercent = (baseheight/float(load.size[1]))
+            wsize = int((float(load.size[0])*float(hpercent)))
+            return ImageTk.PhotoImage(load.resize((wsize, baseheight)))
+        else:
+            print('test3')
+            basewidth = self.image_size
+            wpercent = (basewidth/float(load.size[0]))
+            hsize = int((float(load.size[1])*float(wpercent)))
+            return ImageTk.PhotoImage(load.resize((basewidth, hsize)))
 
     def changeImage(self):
         filename = filedialog.askopenfilename(initialdir =  "~", title = "Select A File", filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+        if (filename):
+            self.loadImage(filename)
+
+    def loadImageFromPILFormat(self, image_pil):
         self.img.destroy()
-        self.loadImage(filename)
+        render = ImageTk.PhotoImage(image_pil.resize((self.image_size, self.image_size)))
+        self.img = Label(self.master, image=render)
+        self.img.image = render
+        self.img.pack(side = 'left')
 
 class textClass:
     def __init__(self, master):
@@ -42,22 +83,22 @@ class textClass:
         self.text.configure(state = 'disabled')
 
 def changeShape(event):
+    global rules_list
+    global image_source
+    global image_pattern
     item = tree.identify('item', event.x, event.y)
-    print("you clicked on", tree.item(item, "text"))
-    #switch case for tree.item
+    # Call engine
+    rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
+    cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+    pil_image = Image.fromarray(cv_image)
+    image_pattern.loadImageFromPILFormat(pil_image)
 
-def pickSource():
-    img.destroy()
-    filename = filedialog.askopenfilename(initialdir =  "~", title = "Select A File", filetypes =
-    (("jpeg files","*.jpg"),("all files","*.*")) )
-    print(filename)
-    load = Image.open(filename)
-    render = ImageTk.PhotoImage(load.resize((IMAGE_SIZE, IMAGE_SIZE)))
-    img = Label(labelframe_input, image=render)
-    img.image = render
-    img.pack(side = 'left')
+def showRules():
+    global rules_list
+    rules_container.changeText(rules_list)
 
-
+def showFacts():
+    facts_container.changeText(rules_list)
 
 root = Tk()
 root.geometry("1000x700")
@@ -71,16 +112,16 @@ row2 = Frame(root)
 row2.pack(side = 'top')
 
 # Source image
-labelframe_input = LabelFrame(row1, text="Source Image")
+labelframe_input = LabelFrame(row1, text="Source Image", width=300, height=300)
 labelframe_input.pack(side = 'left')
 
-image_source = imageClass(labelframe_input, "images/box.jpeg", IMAGE_SIZE)
+image_source = imageClass(labelframe_input, DEFAULT_PICTURE_IMAGE, IMAGE_SIZE)
 
 # Pattern image
 labelframe_pattern = LabelFrame(row1, text="Detection Image")
 labelframe_pattern.pack(side = 'left')
 
-image_pattern = imageClass(labelframe_pattern, "images/rectangle.jpg", IMAGE_SIZE)
+image_pattern = imageClass(labelframe_pattern, DEFAULT_PICTURE_SHAPE, IMAGE_SIZE)
 
 # Button
 button_container = Label(row1)
@@ -92,10 +133,10 @@ btn_open_image.pack(side = 'top', pady = 4)
 btn_open_rule = Button(button_container, text='Open Rule Editor', width = BUTTON_WIDTH)
 btn_open_rule.pack(side = 'top', pady = 4)
 
-btn_show_rule = Button(button_container, text='Show Rules', width = BUTTON_WIDTH)
+btn_show_rule = Button(button_container, text='Show Rules', width = BUTTON_WIDTH, command = showRules)
 btn_show_rule.pack(side = 'top', pady = 4)
 
-btn_show_facts = Button(button_container, text='Show Facts', width = BUTTON_WIDTH)
+btn_show_facts = Button(button_container, text='Show Facts', width = BUTTON_WIDTH, command = showFacts)
 btn_show_facts.pack(side = 'top', pady = 4)
 
 # Treeview
@@ -107,10 +148,9 @@ tree.heading("#0",text="Shape")
 shape = tree.insert('', 'end', text = "All Shapes")
 #Level 1
 segitiga = tree.insert(shape, 'end', text = "Segitiga")
-segiempat = tree.insert(shape, 'end', text = "Segiempat")
-segilima = tree.insert(shape, 'end', text = "Segilima")
-segienam = tree.insert(shape, 'end', text = "Segienam")
-#Level 2
+segiempat = tree.insert(shape, 'end', text = "Segi Empat")
+segilima = tree.insert(shape, 'end', text = "Segi Lima")
+segienam = tree.insert(shape, 'end', text = "Segi Enam")
 segitiga_lancip = tree.insert(segitiga, 'end', text = "Segitiga Lancip")
 segitiga_tumpul = tree.insert(segitiga, 'end', text = "Segitiga Tumpul")
 segitiga_siku = tree.insert(segitiga, 'end', text = "Segitiga Siku-siku")
@@ -120,8 +160,8 @@ segitiga_sisi = tree.insert(segitiga, 'end', text = "Segitiga Sama Sisi")
 jajaran_genjang = tree.insert(segiempat, 'end', text = "Jajaran Genjang")
 trapesium = tree.insert(segiempat, 'end', text = "Trapesium")
 
-segilima_sisi = tree.insert(segilima, 'end', text = "Segilima Sama Sisi")
-segienam_sisi = tree.insert(segienam, 'end', text = "Segienam Sama Sisi")
+segilima_sisi = tree.insert(segilima, 'end', text = "Segi Lima Sama Sisi")
+segienam_sisi = tree.insert(segienam, 'end', text = "Segi Enam Sama Sisi")
 
 #Level 3
 segitiga_kaki_siku = tree.insert(segitiga_kaki, 'end', text = "Segitiga Sama Kaki dan Siku-siku")
@@ -138,22 +178,22 @@ trapesium_kiri = tree.insert(trapesium, 'end', text = "Trapesium Rata Kiri")
 tree.bind('<Double-1>', changeShape)
 tree.pack(side = 'top')
 
-# Result image
+# Result
 labelframe_result = LabelFrame(row2, text="Detection Result")
 labelframe_result.pack(side = 'left')
 
-image_result = imageClass(labelframe_result, "images/rectangle.jpg", 300)
+result_text = textClass(labelframe_result)
 
 # Facts lists
-labelframe_facts = LabelFrame(row2, text="Hit Rules")
-labelframe_facts.pack(side = 'left')
-
-facts_container = textClass(labelframe_facts)
-
-# Rulse lists
-labelframe_rule = LabelFrame(row2, text="Matched Facts")
+labelframe_rule = LabelFrame(row2, text="Hit Rules")
 labelframe_rule.pack(side = 'left')
 
 rules_container = textClass(labelframe_rule)
+
+# Rulse lists
+labelframe_fact = LabelFrame(row2, text="Matched Facts")
+labelframe_fact.pack(side = 'left')
+
+facts_container = textClass(labelframe_fact)
 
 root.mainloop()
