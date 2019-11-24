@@ -108,9 +108,8 @@ class ShapeIdentifier(KnowledgeEngine):
             if (index_tumpul < index_lancip):
                 #karena counter-clockwise, maka jika sudut tumpul ditemukan sebelum sudut lancip, maka trapesium rata kiri /__|
                 self.result.append(("Trapesium Rata Kiri", "(jumlah_sudut == 4) && (index_tumpul < index_lancip) ==> Trapesium Rata Kiri"))
-            else:
+            elif (index_tumpul > index_lancip):
                 #jika sudut tumpul ditemukan setelah sudut lancip, maka trapesium rata kanan |_\
-                assert(index_tumpul > index_lancip)
                 self.result.append(("Trapesium Rata Kanan", "(jumlah_sudut == 4) && (index_tumpul > index_lancip) ==> Trapesium Rata Kanan"))
 
     #segi lima
