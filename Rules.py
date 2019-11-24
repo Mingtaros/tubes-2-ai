@@ -57,7 +57,7 @@ class ShapeIdentifier(KnowledgeEngine):
                 self.result.append(("Segitiga Sama Kaki dan Lancip", "(jumlah_sudut == 3) && (angle_1 == angle_2) && (angles < 90) ==> Segitiga Sama Kaki dan Lancip"))
 
             elif ([x for x in Fact['list_of_angles'] if (x > 90)]): #ada sudut yang > 90 derajat
-                self.result.append(("Segitiga Tumpul", "(jumlah_sudut == 3) && (angle_1 == angle_2) && ((angle_1 || angle_2 || angle_3) > 90) ==> Segitiga Tumpul"))
+                self.result.append(("Segitiga Sama Kaki dan Tumpul", "(jumlah_sudut == 3) && (angle_1 == angle_2) && ((angle_1 || angle_2 || angle_3) > 90) ==> Segitiga Tumpul"))
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(3)))
     def segitiga_sama_sisi(self, Fact):
@@ -67,7 +67,7 @@ class ShapeIdentifier(KnowledgeEngine):
     #segi empat
     @Rule(AS.Fact << Fact(jumlah_sudut = L(4)))
     def jajaran_genjang(self, Fact):
-        if (Fact['list_of_angles'][0] == Fact['list_of_angles'][2] and Fact['list_of_angles'][1] == Fact['list_of_angles'][3]):
+        if (round(Fact['list_of_angles'][0]) == round(Fact['list_of_angles'][2]) and round(Fact['list_of_angles'][1]) == round(Fact['list_of_angles'][3])):
             self.result.append(("Jajaran Genjang", "(jumlah_sudut == 4) && (angle_1 == angle_3) && (angle_2 == angle_4) ==> Jajaran Genjang"))
 
             if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and isExistElementInError(Fact['list_of_angles'], 90, degree_epsilon)):
@@ -78,13 +78,13 @@ class ShapeIdentifier(KnowledgeEngine):
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(4)))
     def trapesium_sama_kaki(self, Fact):
-        if ((Fact['list_of_angles'][0] == Fact['list_of_angles'][1] and Fact['list_of_angles'][2] == Fact['list_of_angles'][3] and Fact['list_of_angles'][0] != Fact['list_of_angles'][2]) or
-            (Fact['list_of_angles'][0] == Fact['list_of_angles'][3] and Fact['list_of_angles'][1] == Fact['list_of_angles'][2] and Fact['list_of_angles'][0] != Fact['list_of_angles'][1])):
+        if ((round(Fact['list_of_angles'][0]) == round(Fact['list_of_angles'][1]) and round(Fact['list_of_angles'][2]) == round(Fact['list_of_angles'][3]) and round(Fact['list_of_angles'][0]) != round(Fact['list_of_angles'][2])) or
+            (round(Fact['list_of_angles'][0]) == round(Fact['list_of_angles'][3]) and round(Fact['list_of_angles'][1]) == round(Fact['list_of_angles'][2]) and round(Fact['list_of_angles'][0]) != round(Fact['list_of_angles'][1]))):
             self.result.append(("Trapesium Sama Kaki", "(jumlah_sudut == 4) && (angle_1 == angle_2 && angle_3 == angle_4) || (angle_1 == angle_4 && angle_2 == angle_3) ==> Trapesium Sama Kaki"))
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(4)))
     def trapesium_rata(self, Fact):
-        n_siku = len([x for x in Fact['list_of_angles'] if (x == 90)])
+        n_siku = len([x for x in Fact['list_of_angles'] if (90-degree_epsilon <= x <= 90+degree_epsilon)])
         n_tumpul = len([x for x in Fact['list_of_angles'] if (x > 90)])
         n_lancip = len([x for x in Fact['list_of_angles'] if (x < 90)])
         if (n_siku == 2 and n_tumpul == 1 and n_lancip == 1):
@@ -101,13 +101,13 @@ class ShapeIdentifier(KnowledgeEngine):
     #segi lima
     @Rule(AS.Fact << Fact(jumlah_sudut = L(5)))
     def segilima_sama_sisi(self, Fact):
-        if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and Fact['list_of_angles'][0] == 108):
+        if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and round(Fact['list_of_angles'][0]) == 108):
             self.result.append(("Segi Lima Sama Sisi", "(jumlah_sudut == 5) && (angle_1 == angle_2 == angle_3 == angle_4 == angle_5) && (angle_1 == 108) ==> Segi Lima Sama Sisi"))
 
     #segi enam
     @Rule(AS.Fact << Fact(jumlah_sudut = L(6)))
     def segienam_sama_sisi(self, Fact):
-        if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and Fact['list_of_angles'][0] == 120):
+        if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and round(Fact['list_of_angles'][0]) == 120):
             self.result.append(("Segi Enam Sama Sisi", "(jumlah_sudut == 6) && (angle_1 == angle_2 == angle_3 == angle_4 == angle_5 == angle_6) && (angle_1 == 120) ==> Segi Enam Sama Sisi"))
 
 
