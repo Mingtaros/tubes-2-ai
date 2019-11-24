@@ -25,6 +25,10 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
 
     yield shape_idx
     yield ("\n\n".join(hit_rules))
+
+    for i in shape_idx:
+        img = ImageProc.gambarContour(img, i)
+
     yield img
 
 if __name__ == "__main__":
@@ -33,6 +37,4 @@ if __name__ == "__main__":
     shape_idx, hit_rules, after = findShapes(filename, shape)
     print(hit_rules)
     print(shape_idx)
-    for i in shape_idx:
-        after = ImageProc.gambarContour(after, i)
     ImageProc.show(after, "WOW")
