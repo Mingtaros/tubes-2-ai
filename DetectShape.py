@@ -19,6 +19,7 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         shape_detector.run()
 
         if (shape == "All Shapes") or ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
+            print(img_idx, angles)
             hit_rules += [str(img_idx)] + [x[1] for x in shape_detector.result] + ['==============================================================================']
             shape_idx.append(img_idx)
 
@@ -27,7 +28,8 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
     yield img
 
 if __name__ == "__main__":
-    filename = "images/" + input("Filename: ")
+    # filename = "images/" + input("Filename: ")
+    filename = "images/test_shape.jpg"
     shape = input("Shape to search for: ")
     shape_idx, hit_rules, after = findShapes(filename, shape)
     print(hit_rules)
