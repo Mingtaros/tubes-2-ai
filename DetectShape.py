@@ -27,7 +27,7 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
     yield img
 
 if __name__ == "__main__":
-    filename = "images/" + input("Filename: ")
+    filename = "images/" + "test_shape.jpg"#input("Filename: ")
     shape = input("Shape to search for: ")
     shape_idx, hit_rules, after = findShapes(filename, shape)
     print(hit_rules)

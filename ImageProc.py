@@ -50,9 +50,13 @@ def DouglasPeucker(titik, eps):
 
 def simplifikasiTitik(has, epsTitik):
     delSoon = set([])
+    # print(has)
     for i, h in enumerate(has):
         for j, cek in enumerate(has):
             if(norm(cek-h) < epsTitik and i < j):
+                # print("cek : ", cek)
+                # print("h : ", h)
+                # print("norm : ", norm(cek-h))
                 delSoon.update({j})
     titikSimple = [h for idx, h in enumerate(has) if idx not in delSoon]
     return titikSimple
@@ -119,6 +123,8 @@ def process(img):
             # print(" YES")
     #         has = simplifikasiTitik(DouglasPeucker(con[conArea[i][0]], eps), epsTitik)
             approx = cv2.approxPolyDP(contour[conArea[i][0]], 0.01*cv2.arcLength(contour[conArea[i][0]], True), True)
+            # print("Diff: " ,len(simplifikasiTitik([a[0] for a in approx], 20))-len(approx), end = " |")
+            approx = simplifikasiTitik([a[0] for a in approx], 20)
             color = (randint(0, 255), randint(0, 255), randint(0, 255))
             ctr = cv2.drawContours(ctr, contour, 22, color, 3)
             # for a in approx:
@@ -127,18 +133,21 @@ def process(img):
             if(len(approx) > 2):
                 sudut = []
                 # print(conArea[i][0]," ",approx, end=" ")
+                print(conArea[i][0], " =   ",   approx, end=" | ")
                 for j in range(len(approx)-2):
                     # print(j, end=", ")
-                    p1 = approx[j][0]
-                    p2 = approx[j+1][0]
-                    p3 = approx[j+2][0]
+                    p1 = approx[j]
+                    p2 = approx[j+1]
+                    p3 = approx[j+2]
                     sudut.append(sudutTigaTitik(p1, p2, p3))
                 # print("")
-                sudut.append(sudutTigaTitik(approx[j][0], approx[j+1][0], approx[0][0]))
-                sudut.append(sudutTigaTitik(approx[j+1][0], approx[0][0], approx[1][0]))
+                # print(j)
+                sudut.append(sudutTigaTitik(approx[j+1], approx[j+2], approx[0]))
+                sudut.append(sudutTigaTitik(approx[j+2], approx[0], approx[1]))
                 sudutPoly.append((conArea[i][0], sudut))
-                print(conArea[i][0], " | ", sudut, " | ", approx)
-    # show(ctr,"bangsat")
+                print(sudut, " | ", approx)
+            print("\n")
+    # show(ctr,"bangsat")   
     # print(sudutPoly)
     # print(contour[22])
     return sudutPoly
