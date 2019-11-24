@@ -10,6 +10,7 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
 
     shape_idx = []
     hit_rules = []
+    hit_facts = []
 
     for img_idx, angles in indexed_angles:
         #Shape Detector
@@ -19,12 +20,13 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         shape_detector.run()
 
         if (shape == "All Shapes") or ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
-            print(img_idx, angles)
-            hit_rules += [str(img_idx)] + [x[1] for x in shape_detector.result] + ['==============================================================================']
+            hit_rules += [x[1] for x in shape_detector.result] + ['\n========================================']
             shape_idx.append(img_idx)
+            hit_facts.append((img_idx, angles))
 
     yield shape_idx
-    yield ("\n\n".join(hit_rules))
+    yield ("\n".join(hit_rules))
+    yield ("\n".join([str(x) + " | " + str(y) for x, y in hit_facts]))
 
     for i in shape_idx:
         img = ImageProc.gambarContour(img, i)
@@ -34,8 +36,9 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
 # if __name__ == "__main__":
 #     filename = "images/" + "test_shape.jpg"#input("Filename: ")
 #     shape = input("Shape to search for: ")
-#     shape_idx, hit_rules, after = findShapes(filename, shape)
+#     shape_idx, hit_rules, hit_facts, after = findShapes(filename, shape)
 #     print(hit_rules)
+#     print(hit_facts)
 #     print(shape_idx)
 #     for i in shape_idx:
 #         after = ImageProc.gambarContour(after, i)

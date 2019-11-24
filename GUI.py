@@ -171,8 +171,8 @@ segitiga_kaki_siku = tree.insert(segitiga_kaki, 'end', text = "Segitiga Sama Kak
 segitiga_kaki_tumpul = tree.insert(segitiga_kaki, 'end', text = "Segitiga Sama Kaki dan Tumpul")
 segitiga_kaki_lancip = tree.insert(segitiga_kaki, 'end', text = "Segitiga Sama Kaki dan Lancip")
 
-segiempat_beraturan = tree.insert(jajaran_genjang, 'end', text = "Segiempat Beraturan")
-layang_layang = tree.insert(jajaran_genjang, 'end', text = "Segiempat Berbentuk Layang-layang")
+segiempat_beraturan = tree.insert(jajaran_genjang, 'end', text = "Segi Empat Beraturan")
+layang_layang = tree.insert(jajaran_genjang, 'end', text = "Segi Empat Berbentuk Layang-layang")
 
 trapesium_kaki = tree.insert(trapesium, 'end', text = "Trapesium Sama Kaki")
 trapesium_kanan = tree.insert(trapesium, 'end', text = "Trapesium Rata Kanan")
