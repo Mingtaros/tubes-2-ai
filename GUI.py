@@ -145,7 +145,7 @@ def openEditor():
     subprocess.run(["gedit", file])
 
 root = Tk()
-root.geometry("1400x700")
+root.geometry("1800x700")
 root.resizable(0, 0)
 root.title('Image Detection')
 
@@ -153,7 +153,7 @@ root.title('Image Detection')
 rowKiri = Frame(root)
 rowKiri.pack(side = 'left')
 rowKanan = Frame(root)
-rowKanan.pack(side = 'right')
+rowKanan.pack(side = 'left')
 row1 = Frame(rowKiri)
 row1.pack(side = 'top')
 row2 = Frame(rowKiri)
