@@ -86,12 +86,22 @@ def changeShape(event):
     global rules_list
     global image_source
     global image_pattern
+<<<<<<< HEAD
     item = tree.identify('item', event.x, event.y)
     # Call engine
     rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
     cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
     pil_image = Image.fromarray(cv_image)
     image_pattern.loadImageFromPILFormat(pil_image)
+=======
+    if (image_source.image_path != DEFAULT_PICTURE_IMAGE):
+        item = tree.identify('item', event.x, event.y)
+        # Call engine
+        rules_list, cv_image = DetectShape.findShapes(image_source.image_path, tree.item(item, "text"))
+        cv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+        pil_image = Image.fromarray(cv_image)
+        image_pattern.loadImageFromPILFormat(pil_image)
+>>>>>>> merge
 
 def showRules():
     global rules_list

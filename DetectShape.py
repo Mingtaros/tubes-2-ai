@@ -34,8 +34,9 @@ def findShapes(filename, shape): # diasumsikan filename sudah ditambahkan "image
         elif ((shape != "All Shapes") and (shape in [x[0] for x in shape_detector.result])):
             cv2.drawContours(img, [approx], 0, (0), 3)
             cv2.putText(img, shape, (x,y), font, 1, (0)) #optional, mungkin gk usah
-            hit_rules += [x[1] for x in shape_detector.result]
-    yield ("\n".join(hit_rules))
+            hit_rules += [x[1] for x in shape_detector.result] + ['==============================================================================']
+        
+    yield ("\n\n".join(hit_rules))
     yield img
 
 # if __name__ == "__main__":

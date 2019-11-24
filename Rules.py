@@ -61,7 +61,11 @@ class ShapeIdentifier(KnowledgeEngine):
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(3)))
     def segitiga_sama_sisi(self, Fact):
+<<<<<<< HEAD
         if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and isExistElementInError(Fact['list_of_angles'], 60, degree_epsilon)):
+=======
+        if (len(set(Fact['list_of_angles'])) == 1 and isExistElementInError(Fact['list_of_angles'], 60, degree_epsilon)):
+>>>>>>> merge
             self.result.append(("Segitiga Sama Sisi", "(jumlah_sudut == 3) && (angle_1 == angle_2 == angle_3) && (angle_1 == 60) ==> Segitiga Sama Sisi"))
 
     #segi empat
@@ -70,10 +74,17 @@ class ShapeIdentifier(KnowledgeEngine):
         if (Fact['list_of_angles'][0] == Fact['list_of_angles'][2] and Fact['list_of_angles'][1] == Fact['list_of_angles'][3]):
             self.result.append(("Jajaran Genjang", "(jumlah_sudut == 4) && (angle_1 == angle_3) && (angle_2 == angle_4) ==> Jajaran Genjang"))
 
+<<<<<<< HEAD
             if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and isExistElementInError(Fact['list_of_angles'], 90, degree_epsilon)):
                 self.result.append(("Segi Empat Beraturan", "(jumlah_sudut == 4) && (angle_1 == angle_3) && (angle_2 == angle_4) && (angle_1 == angle_2 == angle_3 == angle_4) && (angle_1 == 90) ==> Segi Empat Beraturan"))
 
             elif (len(set([round(x) for x in Fact['list_of_angles']])) == 2 and (not isExistElementInError(Fact['list_of_angles'], 90, degree_epsilon))):
+=======
+            if (len(set(Fact['list_of_angles'])) == 1 and isExistElementInError(Fact['list_of_angles'], 90, degree_epsilon)):
+                self.result.append(("Segi Empat Beraturan", "(jumlah_sudut == 4) && (angle_1 == angle_3) && (angle_2 == angle_4) && (angle_1 == angle_2 == angle_3 == angle_4) && (angle_1 == 90) ==> Segi Empat Beraturan"))
+
+            elif (len(set(Fact['list_of_angles'])) == 2 and (not isExistElementInError(Fact['list_of_angles'], 90, degree_epsilon))):
+>>>>>>> merge
                 self.result.append(("Segi Empat Berbentuk Layang-layang", "(jumlah_sudut == 4) && (angle_1 == angle_3) && (angle_2 == angle_4) && (90 not in angles) ==> Segi Empat Berbentuk Layang-layang"))
 
     @Rule(AS.Fact << Fact(jumlah_sudut = L(4)))
@@ -101,13 +112,21 @@ class ShapeIdentifier(KnowledgeEngine):
     #segi lima
     @Rule(AS.Fact << Fact(jumlah_sudut = L(5)))
     def segilima_sama_sisi(self, Fact):
+<<<<<<< HEAD
         if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and Fact['list_of_angles'][0] == 108):
+=======
+        if (len(set(Fact['list_of_angles'])) == 1 and Fact['list_of_angles'][0] == 108):
+>>>>>>> merge
             self.result.append(("Segi Lima Sama Sisi", "(jumlah_sudut == 5) && (angle_1 == angle_2 == angle_3 == angle_4 == angle_5) && (angle_1 == 108) ==> Segi Lima Sama Sisi"))
 
     #segi enam
     @Rule(AS.Fact << Fact(jumlah_sudut = L(6)))
     def segienam_sama_sisi(self, Fact):
+<<<<<<< HEAD
         if (len(set([round(x) for x in Fact['list_of_angles']])) == 1 and Fact['list_of_angles'][0] == 120):
+=======
+        if (len(set(Fact['list_of_angles'])) == 1 and Fact['list_of_angles'][0] == 120):
+>>>>>>> merge
             self.result.append(("Segi Enam Sama Sisi", "(jumlah_sudut == 6) && (angle_1 == angle_2 == angle_3 == angle_4 == angle_5 == angle_6) && (angle_1 == 120) ==> Segi Enam Sama Sisi"))
 
 
