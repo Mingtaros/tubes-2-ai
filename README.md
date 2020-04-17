@@ -27,5 +27,5 @@ Find All &lt;shape> in image using OpenCV - Rule Based System
         <td>Vinsen Marselino Andreas</td><td>13517054</td>
     </tr><tr>
         <td>Arvin Yustin</td><td>13517124</td>
-    </tr><tr>
+    </tr>
 </table>
